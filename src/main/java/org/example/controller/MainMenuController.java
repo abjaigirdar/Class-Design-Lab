@@ -11,14 +11,31 @@ public class MainMenuController {
     ConsoleIO io;
     AlbumRepo albums;
     ArtistRepo artists;
+    String currentUser;
+    boolean isUserLoggedIn;
     // TODO: add Users user
     private static final int CHOICE_VIEW_ALL_ALBUMS = 1;
     private static final int CHOICE_VIEW_ALBUMS_BY_ARTIST = 2;
     private static final int CHOICE_VIEW_ALBUM = 3;
-    private static final int LOGIN = 4;
+    private static final int CHOICE_LOGIN = 4;
+    private static final int CHOICE_LOGOUT_LOGIN_MENU = 5;
+
     private static final int CHOICE_QUIT = 5;
     private static final int MIN_CHOICE = 1;
-    private static final int MAX_CHOICE = 4;
+    private static final int MAX_CHOICE = 5;
+    private static final int ADD_REVIEW = 4;
+    private static final int MAX_CHOICE_LOGIN_MENU = 6;
+    private static final int CHOICE_QUIT_USER_MENU = 6;
+    private static final int MAIN_MENU = 4;
+
+
+
+    // add user choices
+    private static final int USER_1 = 1;
+    private static final int USER_2 = 2;
+    private static final int USER_3 = 3;
+
+
 
     public MainMenuController(ConsoleIO io, AlbumRepo albums, ArtistRepo artists) {
         this.albums = albums;
@@ -51,11 +68,27 @@ public class MainMenuController {
                 case CHOICE_VIEW_ALBUM:
                     viewAlbum();
                     break;
-                case LOGIN:
-                    printSelectUserMenu();
-
-                    // TODO: once the user is selected an logged in, print the main menu again
-
+                case CHOICE_LOGIN:
+                    printLoginMenu();
+                    choice = io.getIntegerInBetween("> ", MIN_CHOICE, MAX_CHOICE_LOGIN_MENU);
+                    switch (choice) {
+                        case USER_1:
+                            currentUser = "user_1";
+                            isUserLoggedIn = true;
+                            break;
+                        case USER_2:
+                            currentUser = "user_2";
+                            isUserLoggedIn = true;
+                            break;
+                        case USER_3:
+                            currentUser = "user_3";
+                            isUserLoggedIn = true;
+                            break;
+                        case MAIN_MENU:
+                            continue;
+                        case CHOICE_QUIT:
+                            break;
+                    }
                     break;
                 case CHOICE_QUIT:
                     io.writeMessage("Goodbye!");
@@ -64,9 +97,6 @@ public class MainMenuController {
             }
         }
     }
-
-
-
 
     private void viewAlbum() {
         int albumId = io.getInteger("Enter album id:");
@@ -120,24 +150,44 @@ public class MainMenuController {
             io.writeMessage(album.getId() + "  -  " + album.getTitle() + "  -  " + album.getArtist().getName());
         }
     }
-
-    /*
     public void printMainMenuHeader() {
+        if (isUserLoggedIn) {
+            io.writeMessage(currentUser + " is logged in");
+            io.writeMessage("---------------------------");
+        }
         io.writeMessage(">>> Main Menu <<<");
-
-        // TODO: show which user is logged in IF anyone is logged in
-
         io.writeMessage(CHOICE_VIEW_ALL_ALBUMS + "  -  View All Albums");
         io.writeMessage(CHOICE_VIEW_ALBUMS_BY_ARTIST + "  -  View Albums by Artist");
         io.writeMessage(CHOICE_VIEW_ALBUM + "  -  View Album Details");
-        io.writeMessage(LOGIN + "  -  Login");
-        io.writeMessage(CHOICE_QUIT + "  -  Quit");
+
+        if (isUserLoggedIn) {
+            io.writeMessage(ADD_REVIEW + "  -  Add a review");
+        }
+
+        if (!isUserLoggedIn) {
+            io.writeMessage(CHOICE_LOGIN + "  -  Login");
+        }
+
+        if (isUserLoggedIn) {
+            io.writeMessage(CHOICE_LOGOUT_LOGIN_MENU + "  -  Logout");
+        }
+
+        if (isUserLoggedIn) {
+            io.writeMessage(CHOICE_QUIT_USER_MENU + "  -  Quit");
+        }
+
+        if (!isUserLoggedIn){
+            io.writeMessage(CHOICE_QUIT + "  -  Quit");
+        }
+
     }
-     */
 
-    public void printSelectUserMenu() {
-        // TODO: add a method that will print a list of users
+    public void printLoginMenu() {
         io.writeMessage(">>> Select User Menu <<<");
-
+        io.writeMessage(USER_1 + "  -  User 1");
+        io.writeMessage(USER_2 + "  -  User 2");
+        io.writeMessage(USER_3 + "  -  User 3");
+        io.writeMessage(MAIN_MENU + "  -  Go back to Main Menu");
+        io.writeMessage(CHOICE_QUIT + "  -  Quit");
     }
 }
