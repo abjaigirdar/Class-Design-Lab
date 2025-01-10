@@ -99,18 +99,22 @@ public class MainMenuController {
     }
 
     private void viewAlbum() {
-        int albumId = io.getInteger("Enter album id:");
+        int albumId = io.getInteger("Enter album id: ");
         Album album = albums.getAlbum(albumId);
         if (album != null) {
             io.writeMessage(">>>> Album Details >>>>");
             io.writeMessage(album.getTitle());
             io.writeMessage(album.getArtist().getName());
-            io.writeMessage("");
+            io.writeMessage("-----------------------");
             for (Song s : album.getSongs()) {
                 io.writeMessage(s.getId() + ": " + s.getTitle());
             }
+            io.writeMessage("-----------------------");
+            if (album.getReview().length() == 0){
+                io.writeMessage("Review - No reviews have been submitted for this album yet");
+            }
+            io.writeMessage("");
         }
-        io.writeMessage("");
     }
 
     private void viewAlbumsByArtist() {
@@ -161,7 +165,7 @@ public class MainMenuController {
         io.writeMessage(CHOICE_VIEW_ALBUM + "  -  View Album Details");
 
         if (isUserLoggedIn) {
-            io.writeMessage(ADD_REVIEW + "  -  Add a review");
+            io.writeMessage(ADD_REVIEW + "  -  Add a review to an album");
         }
 
         if (!isUserLoggedIn) {
